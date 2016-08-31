@@ -8,7 +8,6 @@ import org.fundacionjala.sevenwonders.core.rest.PlayerModel;
 import org.fundacionjala.sevenwonders.core.rest.WebSocketConnection;
 import org.springframework.stereotype.Component;
 
-import java.security.SecureRandom;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -37,7 +36,6 @@ public class AuthService {
         WebSocketConnection webSocketConnection = new WebSocketConnection();
         webSocketConnection.setChannel(9292);
         webSocketConnection.setPath("lobby");
-        player.setWebSocketConnection(webSocketConnection);
 
         autoIncrementId++;
         return player;
