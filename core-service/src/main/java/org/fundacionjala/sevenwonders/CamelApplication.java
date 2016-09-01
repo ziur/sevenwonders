@@ -4,7 +4,6 @@
  */
 package org.fundacionjala.sevenwonders;
 
-import org.apache.camel.spring.javaconfig.Main;
 import org.apache.log4j.Logger;
 
 /**
@@ -17,14 +16,8 @@ public class CamelApplication {
 
     private static final Logger logger = Logger.getLogger(CamelApplication.class);
 
-    public static void main(String[] args) throws Exception {
-        Main main = new Main();
-        main.setConfigClasses(GameConfig.class.getName());
-        try{
-            main.run();
-        } catch (Exception ex){
-            logger.fatal("Camel startup failed", ex);
-        }
+    public static void main(String[] args) {
+//        SpringApplication.run(SampleCamelApplication.class, args);
     }
 
 }

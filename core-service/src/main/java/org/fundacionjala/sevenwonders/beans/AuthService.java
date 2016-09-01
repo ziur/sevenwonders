@@ -5,10 +5,8 @@
 package org.fundacionjala.sevenwonders.beans;
 
 import org.fundacionjala.sevenwonders.core.rest.PlayerModel;
-import org.fundacionjala.sevenwonders.core.rest.WebSocketConnection;
 import org.springframework.stereotype.Component;
 
-import java.security.SecureRandom;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
