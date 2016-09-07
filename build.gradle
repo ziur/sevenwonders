@@ -10,5 +10,5 @@ task wrapper(type: Wrapper) {
 
 
 task stage {
-  dependsOn clean, build
+  dependsOn core-service:clean, core-service:build
 }
