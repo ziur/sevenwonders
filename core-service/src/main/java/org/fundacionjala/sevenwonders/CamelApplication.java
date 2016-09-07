@@ -4,27 +4,17 @@
  */
 package org.fundacionjala.sevenwonders;
 
-import org.apache.camel.spring.javaconfig.Main;
-import org.apache.log4j.Logger;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  *  This contains how to start a camel rest service.
  *
  * @author Juan Barahona
  */
-
+@SpringBootApplication
 public class CamelApplication {
-
-    private static final Logger logger = Logger.getLogger(CamelApplication.class);
-
-    public static void main(String[] args) throws Exception {
-        Main main = new Main();
-        main.setConfigClasses(GameConfig.class.getName());
-        try{
-            main.run();
-        } catch (Exception ex){
-            logger.fatal("Camel startup failed", ex);
-        }
+    public static void main(String[] args) {
+        SpringApplication.run(CamelApplication.class, args);
     }
-
 }
