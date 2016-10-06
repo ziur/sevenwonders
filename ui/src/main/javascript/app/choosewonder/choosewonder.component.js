@@ -7,29 +7,18 @@ angular.
         controller: ['ChooseWonder',
             function ChooseWonderController(ChooseWonder) {
                 var self = this;
-                var listOfWonders = [{
-                    'name': "olympia"
-                }, {
-                        'name': "babylon"
-                    }, {
-                        'name': "ephesos"
-                    }, {
-                        'name': "alexandria"
-                    }, {
-                        'name': "gizah"
-                    }, {
-                        'name': "halinarkassus"
-                    }, {
-                        'name': "rodhos"
-                    }];
-                self.wonders = listOfWonders;
+                self.wonderPlayers = [];
+                ChooseWonder.getWonderPlayers().then(function (result) {
+                    self.wonderPlayers = result;
+                    self.wonders = self.wonderPlayers;
+                });
                 this.rotate = function (data) {
                     if (data == 'next') {
-                        listOfWonders.slice(0, 3);
-                        self.wonders.push(listOfWonders.shift());
+                        self.wonderPlayers.slice(0, 3);
+                        self.wonders.push(self.wonderPlayers.shift());
                     } else if (data == 'previous') {
-                        listOfWonders.slice(0, 3);
-                        self.wonders.unshift(listOfWonders.pop());
+                        self.wonderPlayers.slice(0, 3);
+                        self.wonders.unshift(self.wonderPlayers.pop());
                     }
                 };
             }
