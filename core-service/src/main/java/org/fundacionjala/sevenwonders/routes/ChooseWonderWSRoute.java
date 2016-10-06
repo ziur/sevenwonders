@@ -5,22 +5,32 @@
 
 package org.fundacionjala.sevenwonders.routes;
 
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.dataformat.JsonLibrary;
+import org.fundacionjala.sevenwonders.core.rest.GameModel;
+import org.fundacionjala.sevenwonders.processors.RoomProcessor;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by Vania Catorceno
  */
 @Component
-public class ChooseWonderWSRoute extends SpringRouteBuilder {
+public class ChooseWonderWSRoute extends RouteBuilder {
+    private RoomProcessor roomProcessor = new RoomProcessor();
     @Override
     public void configure() throws Exception {
-        from("websocket://localhost:9298/choosewonder")
-                .to("websocket://localhost:9298/choosewonder?sendToAll=false");
+       from("atmosphere-websocket://choosewonder")
+                .log("room ready websocket")
+                .unmarshal().json(JsonLibrary.Jackson, GameModel.class)
+                .process(roomProcessor)
+                .log("${body}")
+                .to("direct:sendMessageRoom");
 
         from("direct:sendMessageRoom")
+                .to("bean:gameRoomService?method=isCompletedPlayers(${header.id})")
                 .to("bean:gameRoomService?method=startGame(${header.id})")
-                .to("websocket://localhost:9298/choosewonder?sendToAll=true");
+                .to("atmosphere-websocket://choosewonder?sendToAll=true");
+
 
     }
 }

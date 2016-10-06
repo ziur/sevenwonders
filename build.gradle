@@ -1,14 +1,18 @@
 apply plugin: 'java'
 
-ext {
-//    project.name = "sevenwonders"
-}
-
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
 
+task defineHost << {
 
-task stage {
-  dependsOn("core-service:clean", "core-service:build")
 }
+
+task copyUI(type: Copy, overwrite: true) {
+    from ("ui/src/main/javascript/app")
+    into "core-service/src/main/webapp"
+}
+
+task stage (dependsOn: ["ui:mbuild", copyUI])
+copyUI.mustRunAfter "ui:mbuild"
+

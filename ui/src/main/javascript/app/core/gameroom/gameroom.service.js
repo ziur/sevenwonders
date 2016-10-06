@@ -2,8 +2,8 @@
 
 angular.
     module('sevenWonders.core.gameroom').
-    factory('GameRoom', ['$cookies', '$websocket', 'Game', 'Restangular', '$q', '$location', '$timeout',
-        function ($cookies, $websocket, Game, Restangular, $q, $location, $timeout) {
+    factory('GameRoom', ['$cookies', '$websocket', 'Game', 'Restangular', '$q', '$location', '$timeout', 'APP_CONFIG',
+        function ($cookies, $websocket, Game, Restangular, $q, $location, $timeout, APP_CONFIG) {
             return {
                 getGameRoom: function () {
                     return Game.getCurrentGame();
@@ -19,7 +19,7 @@ angular.
                     return defer.promise;
                 },
                 connectWebsocket: function (game) {
-                    var dataStream = $websocket('ws://localhost:9295/game');
+                    var dataStream = $websocket(APP_CONFIG.wsPath + '/game');
                     dataStream.onMessage(function (message) {
                         game.addPlayer(JSON.parse(message.data));
                         console.log('joined');
@@ -27,7 +27,7 @@ angular.
                 },
 
                 connectRoomWebsocket: function(game) {
-                    var dataRoom = $websocket('ws://localhost:9298/choosewonder');
+                    var dataRoom = $websocket(APP_CONFIG.wsPath + '/choosewonder');
                     dataRoom.onOpen(function () {
                         console.log('open connection at choosewonder');
                     });

@@ -5,10 +5,9 @@
 
 package org.fundacionjala.sevenwonders.routes;
 
+import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
-import org.apache.camel.spring.SpringRouteBuilder;
 import org.fundacionjala.sevenwonders.core.rest.GameModel;
-import org.fundacionjala.sevenwonders.core.rest.PlayerModel;
 import org.fundacionjala.sevenwonders.processors.GameProcessor;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +15,11 @@ import org.springframework.stereotype.Component;
  * Created by Luis Gumucio.
  */
 @Component
-public class GameWSRoute extends SpringRouteBuilder {
+public class GameWSRoute extends RouteBuilder {
     private GameProcessor gameProcessor = new GameProcessor();
     @Override
     public void configure() throws Exception {
-        from("websocket://localhost:9295/game")
+        from("atmosphere-websocket://game")
                 .log("join websocket")
                 .unmarshal().json(JsonLibrary.Jackson, GameModel.class)
                 .process(gameProcessor)
@@ -29,7 +28,7 @@ public class GameWSRoute extends SpringRouteBuilder {
 
         from("direct:sendMessageGame")
                 .to("bean:gameRoomService?method=validateGame(${header.id}, ${body})")
-                .to("websocket://localhost:9295/game?sendToAll=true");
+                .to("atmosphere-websocket://game?sendToAll=true");
 
 
     }

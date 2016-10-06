@@ -1,4 +1,5 @@
 'use strict';
+
 angular.module('sevenWonder')
     .config(['$locationProvider', '$routeProvider',
         function config($locationProvider, $routeProvider) {
@@ -22,6 +23,14 @@ angular.module('sevenWonder')
                 .otherwise('/login');
         }
     ])
-    .config(['RestangularProvider', function(RestangularProvider) {
-        RestangularProvider.setBaseUrl('http://localhost:9999');
-    }]);
+    .config(['RestangularProvider', 'APP_CONFIG', function(RestangularProvider, APP_CONFIG) {
+        //APP_CONFIG
+
+        var host = "";
+        if (APP_CONFIG.host) {
+            host = "http://" + APP_CONFIG.host + ":" + APP_CONFIG.port;
+        }
+
+        RestangularProvider.setBaseUrl(host + '/api');
+    }])
+    ;
