@@ -4,14 +4,13 @@
  */
 package org.fundacionjala.sevenwonders.routes;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.dataformat.avro.AvroDataFormat;
 import org.fundacionjala.sevenwonders.core.GameRoom;
 import org.fundacionjala.sevenwonders.core.Player;
 import org.fundacionjala.sevenwonders.core.rest.GameRoomModel;
 import org.fundacionjala.sevenwonders.core.rest.PlayerModel;
-import org.fundacionjala.sevenwonders.processors.GameProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,13 +20,14 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public class GameRoomRoute extends SpringRouteBuilder {
+public class GameRoomRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        
+
         rest("/games").description("Lobby rest service")
                 .consumes("application/json").produces("application/json")
+
                 .post().description("Create a new game room").type(GameRoomModel.class)
                 .route()
                 .to("bean:gameRoomService?method=createGameRoom")
@@ -50,19 +50,13 @@ public class GameRoomRoute extends SpringRouteBuilder {
                 .endRest()
 
                 .get("/{id}").description("Get a game room").type(GameRoom.class)
-                .to("bean:gameRoomService?method=getGameRoom(${header.id})").verb("options")
-                .route()
-
-                .setHeader("Access-Control-Allow-Origin", constant("*"))
-                .setHeader("Access-Control-Allow-Methods", constant("GET, HEAD, POST, PUT, DELETE, OPTIONS"))
-                .setHeader("Access-Control-Allow-Headers", constant("Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"))
-                .setHeader("Allow", constant("GET, HEAD, POST, PUT, DELETE, OPTIONS"));
+                .to("bean:gameRoomService?method=getGameRoom(${header.id})");
 
         from("direct:wonderChosen")
-                .to("websocket://localhost:9291/chooseWonder?sendToAll=true");
+                .to("atmosphere-websocket://chooseWonder?sendToAll=true");
 
         from("direct:sendMessage")
-                .to("websocket://localhost:9291/lobby?sendToAll=true");
+                .to("atmosphere-websocket://lobby?sendToAll=true");
 
     }
 }

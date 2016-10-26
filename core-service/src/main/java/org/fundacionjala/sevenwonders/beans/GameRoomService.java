@@ -5,6 +5,8 @@
 package org.fundacionjala.sevenwonders.beans;
 
 import org.fundacionjala.sevenwonders.core.GameRoom;
+import org.fundacionjala.sevenwonders.core.rest.GameRoomModel;
+import org.fundacionjala.sevenwonders.core.rest.PlayerModel;
 import org.fundacionjala.sevenwonders.core.rest.*;
 import org.springframework.stereotype.Component;
 

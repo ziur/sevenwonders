@@ -19,9 +19,9 @@ angular.
                     return defer.promise;
                 },
                 connectWebsocket: function (game) {
-                    var dataStream = $websocket('ws://localhost:9295/game');
+                    var dataStream = $websocket('ws://localhost:8080/game');
                     var data = Game.getCurrentGame();
-                    dataStream.send(JSON.stringify(data));                  
+                    dataStream.send(JSON.stringify(data));
                     dataStream.onMessage(function (message) {
                         game.addPlayer(JSON.parse(message.data));
                         console.log('joined');
@@ -29,7 +29,7 @@ angular.
                 },
 
                 connectRoomWebsocket: function(game) {
-                    var dataRoom = $websocket('ws://localhost:9298/choosewonder');
+                    var dataRoom = $websocket('ws://localhost:8080/choosewonder');
                     dataRoom.onOpen(function () {
                         console.log('open connection at choosewonder');
                     });

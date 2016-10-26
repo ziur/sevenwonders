@@ -10,7 +10,6 @@ index.html
 *.css
 
 # Package Files #
-*.jar
 *.war
 *.ear
 

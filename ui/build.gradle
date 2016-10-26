@@ -1,6 +1,7 @@
 plugins {
     id "com.moowork.gulp" version "0.13"
     id "com.moowork.node" version "0.13"
+    id 'com.craigburke.karma' version '1.4.3'
 }
 
 node {
@@ -28,10 +29,22 @@ gulp {
 }
 
 // makes sure on each build that gulp is installed
-gulp_build.dependsOn 'installGulp'
+//gulp_build.dependsOn 'installGulp'
 
 // processes your package.json before running gulp build
-gulp_build.dependsOn 'npmInstall'
+//gulp_build.dependsOn 'npmInstall'
+//gulp_build.dependsOn 'gulp_bower'
+//gulp_build.dependsOn 'gulp_generateCSS'
+//gulp_build.dependsOn 'gulp_buildIndex'
+
+tasks['gulp_buildIndex'].dependsOn "gulp_generateCSS"
+tasks['gulp_bower'].dependsOn "npmInstall"
+tasks['gulp_bower'].dependsOn "installGulp"
 
 // runs "gulp build" as part of your gradle build
-//build.dependsOn gulp_build
+task mbuild(dependsOn: ['gulp_bower', 'gulp_generateCSS', 'gulp_buildIndex'])
+tasks['gulp_generateCSS'].mustRunAfter 'gulp_bower'
+tasks['gulp_buildIndex'].mustRunAfter 'gulp_generateCSS'
+
+
+

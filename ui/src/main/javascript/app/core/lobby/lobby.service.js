@@ -2,14 +2,14 @@
 
 angular.
     module('sevenWonders.core.lobby').
-    factory('Lobby', ['$cookies', '$websocket', 'Restangular', 'Auth', '$q',
-        function ($cookies, $websocket, Restangular, Auth, $q) {
+    factory('Lobby', ['$websocket',
+        function ($websocket) {
             var lobbySource;
 
             return {
                 connectWs: function(lobby) {
                     lobbySource = lobby;
-                    var dataStream = $websocket('ws://localhost:9291/lobby');
+                    var dataStream = $websocket('ws://localhost:8080/lobby');
                     dataStream.onMessage(function (message) {
                         lobby.validateGame(JSON.parse(message.data));
                     });

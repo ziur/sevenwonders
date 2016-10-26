@@ -30,5 +30,5 @@ angular.module('sevenWonder')
         })
     })
     .config(['RestangularProvider', function (RestangularProvider) {
-        RestangularProvider.setBaseUrl('http://localhost:9999');
+        RestangularProvider.setBaseUrl('http://localhost:8080/api');
     }]);

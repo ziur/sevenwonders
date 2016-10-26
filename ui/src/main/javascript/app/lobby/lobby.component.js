@@ -28,7 +28,7 @@ angular.
                     Game.create(gameSettings)
                         .then(function (result) {
                             console.log('create');
-                            $location.path('/gameroom');
+                            //$location.path('/gameroom');
                         });
 
                 };

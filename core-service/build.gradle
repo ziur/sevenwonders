@@ -1,6 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '1.4.0.RELEASE'
+        springBootVersion = '1.4.1.RELEASE'
+        camelVersion = '2.18.0'
     }
     repositories {
         mavenCentral()
@@ -10,48 +11,64 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.commercehub.gradle.plugin.avro-base" version "0.9.0"
+}
+
 apply plugin: 'java'
 apply plugin: 'spring-boot'
+apply plugin: 'war'
+apply plugin: "com.commercehub.gradle.plugin.avro"
 
 version 'unspecified'
+/*
+bootRun {
+    addResources = true
+}*/
 
+bootRepackage {
+    mainClass = 'org.fundacionjala.sevenwonders.springboot.CamelApplication'
+}
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    maven {
+  /*  maven {
         url 'https://repository.apache.org/content/repositories/snapshots/'
-    }
+    }*/
 }
-
-
-ext {
-
-}
-
-
 dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile group: 'org.apache.camel', name: 'camel-spring-boot-starter', version: '2.18-SNAPSHOT'
-    compile group: 'org.apache.camel', name: 'camel-websocket', version: '2.18-SNAPSHOT'
-//    compile group: 'org.apache.camel', name: 'camel-core', version: '2.18-SNAPSHOT'
-    compile group: 'org.apache.camel', name: 'camel-jackson', version: '2.18-SNAPSHOT'
-    compile group: 'org.apache.camel', name: 'camel-jetty', version: '2.18-SNAPSHOT'
-    compile group: 'org.apache.camel', name: 'camel-jetty-common', version: '2.18-SNAPSHOT'
-    compile(group: 'org.apache.camel', name: 'camel-spring', version: '2.18-SNAPSHOT') {
-        exclude(module: 'spring-tx')
-        exclude(module: 'spring-aop')
-        exclude(module: 'spring-expression')
-        exclude(module: 'spring-context')
+    compile group: 'org.apache.avro', name: 'avro', version: '1.8.1'
+
+
+    compile group: 'org.apache.camel', name: 'camel-avro', version:camelVersion
+    compile group: 'org.apache.camel', name: 'camel-spring-boot', version:camelVersion
+    compile group: 'org.apache.camel', name: 'camel-jackson', version:camelVersion
+    compile group: 'org.apache.camel', name: 'camel-servlet', version:camelVersion
+    compile group: 'org.apache.camel', name: 'camel-atmosphere-websocket', version:camelVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version:springBootVersion
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:springBootVersion) {
+        exclude(module: 'spring-boot-starter-tomcat')
     }
 
-    compile group: 'org.apache.camel', name: 'camel-spring-javaconfig', version: '2.18-SNAPSHOT'
+    compile group: 'org.apache.camel', name: 'camel-spring-javaconfig', version:camelVersion
 
-//    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.21'
+    providedCompile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: springBootVersion
 
-    testCompile group: 'org.apache.camel', name: 'camel-test', version: '2.18-SNAPSHOT'
-    testCompile 'org.springframework.boot:spring-boot-starter-test:1.4.0.RELEASE'
+    testCompile group: 'org.apache.camel', name: 'camel-test', version: camelVersion
+    testCompile group: 'org.apache.camel', name: 'camel-test-spring', version: camelVersion
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
 
+    compile("org.springframework.boot:spring-boot-devtools")
 }
+/*
+
+task generateAvro(type: com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask) {
+    source("src/avro")
+    outputDir = file("dest/avro")
+}
+
+compileJava.source(generateAvro.outputs)
+*/
